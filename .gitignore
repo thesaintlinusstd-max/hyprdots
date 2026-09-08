@@ -1,0 +1,22 @@
+# local caches / runtime — never commit these
+.cache/
+*.addr
+*.log
+*.swp
+*~
+.DS_Store
+
+# real proxy config with secrets (only .example is public)
+bpb/bpb.json
+**/bpb.json
+!**/*.example
+
+# personal AI prompt overrides (only .example is public)
+# used by dict-open.fish / anki-open.fish / okular-google-search
+prompts/*.txt
+!prompts/*.txt.example
+
+# chromium throwaway profiles created by dict/anki popups
+# (they live in ~/.cache, not in this repo — listed here just in case)
+chromium-anki/
+chromium-dict-*/

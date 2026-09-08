@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Try PRIMARY selection first (highlighted text in most Wayland apps)
+TEXT=$(timeout 0.3 wl-paste --primary 2>/dev/null || echo "")
+
+# If PRIMARY is empty, try Ctrl+C + CLIPBOARD (Okular, some Qt apps)
+if [[ -z "$TEXT" ]]; then
+    wtype -M ctrl c -m ctrl
+    sleep 0.1
+    TEXT=$(timeout 1.0 wl-paste 2>/dev/null || echo "")
+fi
+
+if [[ -z "$TEXT" ]]; then
+    notify-send -t 3500 "Search" "❌ متنی انتخاب نشده"
+    exit 1
+fi
+
+# Generic prompt. To personalize (e.g. add your own field of study) create
+# ~/.config/hyprdots/prompts/okular-prompt.txt — it overrides the default and is
+# never committed (gitignored). See prompts/okular-prompt.txt.example in the repo.
+PROMPT_FILE="$HOME/.config/hyprdots/prompts/okular-prompt.txt"
+if [[ -s "$PROMPT_FILE" ]]; then
+    PROMPT="$(cat "$PROMPT_FILE")"
+else
+    PROMPT="من میخوام زبان یاد بگیرم در ادامه یه متن یا کلمه انگلیسی میدم بهت تو به فارسی ترجمه کن نکات خلاصه رو هم بگو بدون هیچ مقدمه ای بریم رو اصل کار اگه متن به یک حوزه تخصصی (علمی یا فنی) مربوطه توضیح تخصصی مختصر هم بده بدون مقدمه برو رواصل کار که مطالب بیخود نبینم :"
+fi
+export PROMPT
+export TEXT
+
+python3 -c "
+import urllib.parse, subprocess, os
+prompt = os.environ['PROMPT']
+text = os.environ['TEXT']
+query = prompt + ' ' + text
+url = 'https://www.google.com/search?q=' + urllib.parse.quote(query, safe='')
+subprocess.run(['brave', url])
+"

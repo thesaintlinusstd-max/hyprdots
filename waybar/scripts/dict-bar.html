@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>dict-bar</title><style>
+html,body{margin:0;height:100%;background:#f5f0e6;overflow:hidden;font-family:Inter,sans-serif;user-select:none}
+#bar{display:flex;align-items:center;gap:4px;height:100%;padding:0 6px;box-sizing:border-box}
+button{font-size:10px;padding:1px 7px;border:1px solid #c9c2ae;border-radius:5px;
+       background:#e6e0d0;color:#4a4436;cursor:pointer;line-height:1.4}
+button.on{background:#4a4436;color:#f5f0e6}
+#word{margin-left:auto;font-size:10px;color:#8f897a;white-space:nowrap;overflow:hidden;
+      text-overflow:ellipsis;max-width:35%}
+</style></head><body>
+<div id="bar">
+  <button id="b-duck" class="on">🦆 Duck.ai</button>
+  <button id="b-goo">🔎 Google</button>
+  <button id="b-cam">📖 Cambridge</button>
+  <span id="word"></span>
+</div>
+<script>
+const w = decodeURIComponent(location.hash.slice(3) || "");
+document.getElementById("word").textContent = w;
+function go(svc, btn){
+  document.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+  fetch("http://127.0.0.1:7634/" + svc + "?w=" + encodeURIComponent(w));
+}
+document.getElementById("b-cam").onclick  = e => go("cambridge", e.target);
+document.getElementById("b-goo").onclick  = e => go("google",  e.target);
+document.getElementById("b-duck").onclick = e => go("duck",   e.target);
+</script></body></html>

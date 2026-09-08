@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Region screenshot -> clipboard (image bytes) + save to file
+set -euo pipefail
+
+DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$DIR"
+FILE="$DIR/screenshot-$(date '+%Y-%m-%d-%H%M%S').png"
+
+grim -g "$(slurp)" "$FILE"
+
+cat "$FILE" | wl-copy --type image/png
+
+notify-send "Screenshot" "Region copied to clipboard\nSaved: $FILE" 2>/dev/null || true
+
+echo "✓ $FILE"

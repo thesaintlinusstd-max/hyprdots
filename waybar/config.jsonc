@@ -1,0 +1,115 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 18,
+    "spacing": 2,
+
+    "on-sigusr1": "toggle",
+    "on-sigusr2": "reload",
+
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["custom/clock", "custom/motto", "tray"],
+    "modules-right": [
+        "custom/mpris",
+        "custom/sysmon",
+        "custom/bpb",
+        "network",
+        "bluetooth",
+        "hyprland/language",
+        "pulseaudio",
+        "custom/battery"
+    ],
+
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{id}"
+    },
+
+    "custom/clock": {
+        "exec": "~/.config/waybar/scripts/custom-clock.sh",
+        "return-type": "json",
+        "interval": 60
+    },
+
+    "custom/sysmon": {
+        "exec": "~/.config/waybar/scripts/sysmon.sh",
+        "return-type": "json",
+        "interval": 3
+    },
+
+    "custom/motto": {
+        "exec": "echo '{\"text\": \"今度こそやるぞ\", \"tooltip\": \"Kondo koso yaru zo — این دفعه انجامش می‌دم!\"}'",
+        "return-type": "json",
+        "interval": "once"
+    },
+
+    "tray": {
+        "icon-size": 14,
+        "spacing": 6
+    },
+
+    "custom/bpb": {
+        "exec": "~/.config/waybar/scripts/bpb-toggle.sh",
+        "return-type": "json",
+        "interval": 2,
+        "on-click": "~/.config/waybar/scripts/bpb-toggle.sh toggle"
+    },
+
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "Disconnected",
+        "on-click": "kitty -e bash -c 'nmcli device wifi rescan & nmtui connect'"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱",
+        "format-disabled": "󰂲",
+        "format-connected-battery": "󰂱",
+        "tooltip-format": "Bluetooth {status}",
+        "tooltip-format-connected": "{device_alias}",
+        "tooltip-format-connected-battery": "{device_alias} ({device_battery_percentage}%)",
+        "tooltip-format-disabled": "Bluetooth off",
+        "on-click": "blueman-manager"
+    },
+
+    "hyprland/language": {
+        "format": "{short}",
+        "format-us": "EN",
+        "format-ir": "IR"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": " Muted",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+    },
+
+    "custom/battery": {
+        "exec": "~/.config/waybar/scripts/battery-status.sh",
+        "return-type": "json",
+        "interval": 2,
+        "signal": 8,
+        "on-click": "if [ $(powerprofilesctl get) = 'performance' ]; then powerprofilesctl set balanced; else powerprofilesctl set performance; fi && pkill -RTMIN+8 waybar"
+    },
+
+    "custom/mpris": {
+        "exec": "~/.config/waybar/scripts/mpris-status.sh",
+        "return-type": "json",
+        "interval": 2,
+        "on-click": "~/.config/waybar/scripts/mpris-click.sh",
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctl previous",
+        "tooltip-format": "{}"
+    }
+}

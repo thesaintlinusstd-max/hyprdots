@@ -1,0 +1,10 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>dict-content</title>
+<style>
+body{margin:0;height:100vh;background:#f5f0e6;display:flex;align-items:center;
+     justify-content:center;font-family:Inter,sans-serif;color:#8f897a;font-size:12px}
+</style></head><body>…</body>
+<script>
+const p = new URLSearchParams(location.hash.slice(1));
+const u = p.get("u");
+if (u) setTimeout(() => location.replace(decodeURIComponent(u)), 350);
+</script></html>

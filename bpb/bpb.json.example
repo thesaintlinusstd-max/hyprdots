@@ -1,0 +1,59 @@
+{
+  "log": {
+    "level": "info"
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 2080
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "urltest",
+      "tag": "auto-best",
+      "outbounds": ["vless-domain", "trojan-domain"],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "vless",
+      "tag": "vless-domain",
+      "server": "YOUR_SERVER.example.com",
+      "server_port": 443,
+      "uuid": "YOUR-UUID-HERE",
+      "tls": {
+        "enabled": true,
+        "server_name": "YOUR_SERVER.example.com",
+        "utls": { "enabled": true, "fingerprint": "chrome" },
+        "alpn": ["http/1.1"]
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/YOUR_PATH_HERE",
+        "headers": { "Host": "YOUR_SERVER.example.com" }
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "trojan-domain",
+      "server": "YOUR_SERVER.example.com",
+      "server_port": 443,
+      "password": "YOUR-PASSWORD-HERE",
+      "tls": {
+        "enabled": true,
+        "server_name": "YOUR_SERVER.example.com",
+        "utls": { "enabled": true, "fingerprint": "chrome" },
+        "alpn": ["http/1.1"]
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/YOUR_PATH_HERE",
+        "headers": { "Host": "YOUR_SERVER.example.com" }
+      }
+    }
+  ]
+}
